@@ -122,32 +122,33 @@ $list_cidades = $c->getAll();
                       
                       <hr>
                     <?php endforeach; ?>
-                    <textarea class="form-control" name="descricao" placeholder="Descreva mais detalhes de seu pedido caso tenha"></textarea>
-                    <input type="radio" name="forma_entrega" value="1" class="forma-entrega" id="entrega"> 
+                    <textarea class="form-control" name="descricao" placeholder="Descreva mais detalhes de seu pedido caso tenha" autocomplete="off"></textarea>
+                    <input type="radio" name="forma_entrega" value="1" class="forma-entrega" id="entrega" autocomplete="off"> 
                     <label for="entrega">Entrega</label>
-                    <input type="radio" name="forma_entrega" value="2" class="forma-entrega" id="loja"><label for="loja">Buscar na Loja</label>
+                    <input type="radio" name="forma_entrega" value="2" class="forma-entrega" id="loja" autocomplete="off">
+                    <label for="loja">Buscar na Loja</label>
                     <div class="formulario">
-                      <input type="text" name="cliente" class="form-control" required="" placeholder="Cliente">
-                      <input type="text" name="contato" class="form-control" required="" placeholder="Contato">
+                      <input type="text" name="cliente" class="form-control" required="" placeholder="Cliente" autocomplete="off">
+                      <input type="text" name="contato" class="form-control" required="" placeholder="Contato" autocomplete="off">
                       <!-- se clicar em entrega abrir esse formularios -->
                       <div class="formulario-interno" hidden="">
-                        <input type="text" name="endereco" class="form-control endereco" placeholder="Endereço Completo">
-                        <input type="text" name="bairro" class="form-control bairro" placeholder="Bairro">
+                        <input type="text" name="endereco" class="form-control endereco" placeholder="Endereço Completo" autocomplete="off">
+                        <input type="text" name="bairro" class="form-control bairro" placeholder="Bairro" autocomplete="off">
                         <select class="form-control cidade" name="id_cidade">
                           <?php foreach ($list_cidades as $cidade): ?>
                             <option value="<?=$cidade['id']; ?>"><?=$cidade['cidade']; ?></option>
                           <?php endforeach; ?>
                         </select>
                         <label>+ Taxa de Envio</label>
-                        <input type="text" disabled="" value="<?=number_format($config['taxa_envio'], 2, '.', ''); ?>" id="taxa_envio" class="form-control">  
+                        <input type="text" disabled="" value="<?=number_format($config['taxa_envio'], 2, '.', ''); ?>" id="taxa_envio" class="form-control" autocomplete="off">  
                         <!-- definir forma de pagamento -->
-                        <input type="radio" name="forma_pagamento" value="1" class="forma-pagamento" id="dinheiro"> 
+                        <input type="radio" name="forma_pagamento" value="1" class="forma-pagamento" id="dinheiro" autocomplete="off"> 
                         <label for="dinheiro">Dinheiro</label>
-                        <input type="radio" name="forma_pagamento" value="2" class="forma-pagamento" id="cartao"> 
+                        <input type="radio" name="forma_pagamento" value="2" class="forma-pagamento" id="cartao" autocomplete="off"> 
                         <label for="cartao">Cartão</label>
                         <!-- caso escolha pagar com dinheiro -->
                         <div class="formulario-interno2" hidden="">
-                          <input type="text" name="troco" class="form-control price troco" placeholder="Troco para:">
+                          <input type="text" name="troco" class="form-control price troco" placeholder="Troco para:" autocomplete="off">
                         </div>
                       </div>
                     </div>

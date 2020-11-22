@@ -17,7 +17,9 @@ class Pedidos extends model{
 		$id_pedido = $this->db->lastInsertId();
 
 		foreach ($produtos as $id_produto => $quantidade) {
-			$this->setProdutos($id_pedido, $id_produto, $quantidade);
+			if (is_int($id_produto)) {
+				$this->setProdutos($id_pedido, $id_produto, $quantidade);
+			}
 		}
 
 		return $id_pedido;
