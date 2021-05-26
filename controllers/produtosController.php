@@ -21,23 +21,21 @@ class produtosController extends controller {
 		
 		//registrar
 		if(!empty($post)){
-			if (!empty($post)) {
-				//verificando se imagem esta preenchida
-				if (!empty($_FILES['imagem']['name'])) {
-					//se a imagem for em png
-					if ($_FILES['imagem']['type'] == 'image/png') {
-						$url = 'assets/img/produtos/';
-						$imagem = md5($_FILES['imagem']['tmp_name'].time().rand(0,999)).'.png';
-						$post['imagem'] = $imagem;
-						$i->png(600, 500, $url, $imagem);
-						$p->set($post);
-						header('Location: '.BASE.'produtos/cadastro');
-					} else {
-						$dados['error'] = 2;
-					}
+			//verificando se imagem esta preenchida
+			if (!empty($_FILES['imagem']['name'])) {
+				//se a imagem for em png
+				if ($_FILES['imagem']['type'] == 'image/png') {
+					$url = 'assets/img/produtos/';
+					$imagem = md5($_FILES['imagem']['tmp_name'].time().rand(0,999)).'.png';
+					$post['imagem'] = $imagem;
+					$i->png(600, 500, $url, $imagem);
+					$p->set($post);
+					header('Location: '.BASE.'produtos/cadastro');
 				} else {
-					$dados['error'] = 1;
+					$dados['error'] = 2;
 				}
+			} else {
+				$dados['error'] = 1;
 			}
 		}	
 

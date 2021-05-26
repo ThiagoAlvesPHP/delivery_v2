@@ -69,9 +69,9 @@ class homeController extends controller {
 							$pagamento = "Cartão";
 						}
 					}
-					//somando a taxa de envio ao valor total
+					$entrega = 'Entegar na casa do cliente';
 					$total += floatval($config['taxa_envio']);
-					$taxa += floatval($config['taxa_envio']);
+					$taxa = floatval($config['taxa_envio']);
 					//verificar se houve alguma descrição
 					if (!empty($get['descricao'])) {
 						$descricao = $get['descricao'];
@@ -80,57 +80,31 @@ class homeController extends controller {
 					}
 					//selecionando produtos e calculando o total
 					foreach ($_SESSION['cart'] as $key => $qt) {
-						//verifica se o key é um inteiro
-						if (is_int($key)){
-							$prod1 = $prod->get($key);
-							$total += $prod1['valor']*$qt;
-						}
-						//verifica se o key é uma string
-						if (is_string($key)){
-							foreach ($qt as $id_add => $qt){
-								$add = $prod->getAdd($id_add);
-	                            $total += $add['valor']*$qt;
-							}
-						}
-					}
+						$prod1 = $prod->get($key);
+						$troco += $prod1['valor']*$qt;
+					}	
+					$troco += $total;
 
 					//se valor enviado no campo troco for maior que total continua
-					if ($get['troco'] >= $total) {
-						$troco = $get['troco'] - $total;
-						//$code = $p->set($get, $_SESSION['cart']);
-						$code = 1;
+					if ($get['troco'] >= $troco) {
+						$troco = $get['troco'] - $troco;
+						$code = $p->set($get, $_SESSION['cart']);
 
-						$msg = "*A ".$config['empresa']." agradeçe seu pedido*%0A%0A*Entegar na casa do cliente*%0A*Pedido:* ".$code." %0A*Cliente:* ".$get['cliente']."%0A*Contato:* ".$get['contato']."%0A*Endereço:* ".$get['endereco']."%0A*Bairro:* ".$get['bairro']."%0A*Cidade:* ".$cidade['cidade']."%0A*Forma de Pagamento:* ".$pagamento."%0A*Troco:* R$".number_format($troco, 2, ',', '.')."%0A*Descrição:* ".$descricao."%0A";
+						$msg = "*A ".$config['empresa']." agradeçe seu pedido*%0A%0A*".$entrega."*%0A*Pedido:* ".$code." %0A*Cliente:* ".$get['cliente']."%0A*Contato:* ".$get['contato']."%0A*Endereço:* ".$get['endereco']."%0A*Bairro:* ".$get['bairro']."%0A*Cidade:* ".$cidade['cidade']."%0A*Forma de Pagamento:* ".$pagamento."%0A*Troco:* R$".number_format($troco, 2, ',', '.')."%0A*Descrição:* ".$descricao."%0A";
 
 						foreach ($_SESSION['cart'] as $id_produto => $quantidade) {
-							//verifica se o key é um inteiro
-							if (is_int($id_produto)){
-								$prod1 = $prod->get($id_produto);
-								$produto = $prod->get($id_produto);
-								$msg .= "*".$quantidade." ".$produto['nome']."* - *Valor: R$".number_format($produto['valor']*$quantidade, 2, ',', '.')."*%0A%0A*Adicionais:*%0A";
-							}
-							//verifica se o key é uma string
-							//adicionais
-							if (is_string($id_produto)){
-								$prod2 = $p->get(substr($id_produto, 2));
-								foreach ($quantidade as $id_add => $qt){
-									$add = $prod->getAdd($id_add);
-
-									$msg .= "%0A*Item:* ".$add['item']."%0A*Quantidade:* ".$qt."%0A*Valor: *".$add['valor']."%0A";
-								}
-							}
-							
+							$produto = $prod->get($id_produto);
+							$total += $quantidade*$produto['valor'];
+							$msg .= "*".$quantidade." ".$produto['nome']."* - *Valor: R$".number_format($produto['valor']*$quantidade, 2, ',', '.')."*%0A";
 						}
 
 						$msg .= "*Taxa de Entrega:* R$".number_format($taxa, 2, ',','.')."%0A-----------------------------------------------%0A%0A%0A%0A*Total: R$".number_format($total, 2, ',', '.')."*%0A%0AAgradecemos a Preferência!";
 
 						$zap .= $msg;
-
-						echo '<script> window.location.assign("'.$zap.'"); </script>';
 						
 						//redirecionamento
-						/*unset($_SESSION['cart']);
-						echo '<script> window.location.assign("'.$zap.'"); </script>';*/
+						unset($_SESSION['cart']);
+						echo '<script> window.location.assign("'.$zap.'"); </script>';
 					} else {
 						echo '<script> alert("Valor inserido em troco é invalido"); window.close(); </script>';
 					}
@@ -162,6 +136,7 @@ class homeController extends controller {
 					//redirecionamento
 					unset($_SESSION['cart']);
 					echo '<script> window.location.assign("'.$zap.'"); </script>';
+
 				}
 			} 
 			//se nenhuma forma de entrega for definida dar um alert e fecha a pagina

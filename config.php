@@ -8,7 +8,7 @@ preg_match( "/{$conexao}/i", $url, $match);
 //defininco se esta em desenvolvimento ou produção
 if (!empty($match)) {
 	define("BASE", "http://localhost/PROJETOS_ANDAMENTO/delivery_v2/");
-	$config['dbname'] = 'albicod_delivery_v2';
+	$config['dbname'] = 'albicod_delivery';
 	$config['host'] = 'localhost';
 	$config['dbuser'] = 'root';
 	$config['dbpass'] = '';
